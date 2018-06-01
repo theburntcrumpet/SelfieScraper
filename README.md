@@ -18,18 +18,13 @@ You'll need to create a file named "credentials.py". This file should contain 4 
   access_token = "AN ACCESS TOKEN HERE"
   access_token_secret = "AN ACCESS TOKEN SECRET HERE" 
 ```
-Once you've created this file, you'll need to create an instance of the database. You can do this by running:
-``` bash
-  python SelfieDB.py
-```
 
-Then check that the file, "Selfies.db", has been created within your working directory. Great. Now its just a case of:
+Great. Now its just a case of:
 ``` bash
   python Selfies.py
 ```
-
-I plan to have the database automatically created if the specified file name doesn't exist. I also intend to revise the database code.
-It grew as I was writing it and I'm not happy with what seems to be duplication between functions.
+<s>I plan to have the database automatically created if the specified file name doesn't exist. I also intend to revise the database code.
+It grew as I was writing it and I'm not happy with what seems to be duplication between functions.</s> This is now done.
 
 Be warned, this doesn't filter NSFW content! There is a lot of it scraped. This is hopefully going to be part of a bigger project which I intend to use to learn a little about TensorFlow and deep learning technologies.
 

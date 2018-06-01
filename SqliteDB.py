@@ -27,8 +27,6 @@ class SqliteDB:
 			return True
 		return False
 
-	# Was going to have this insert multiple values but the way the string has to be formatted in sqlite3 doesn't allow for this dynamically
-	# The alternative would be to generate the values myself but they wouldn't be sql escaped
 	def InsertValuesIntoTable(self,tableName,columnList,valuesList):
 		if(len(columnList) != len(valuesList)):
 			logging.error("column and value list must be equilength")
