@@ -60,6 +60,7 @@ class SelfieDB(SqliteDB):
 				continue
 			if self.InsertMapping(currentId,selfieId):
 				logging.info("Hashtag ID: {} Selfie ID: {} Selfie URL: {} Hashtag: #{}".format(currentId,selfieId,selfieUrl,hashtag))
+
 if __name__ == "__main__":
 	myDB = SelfieDB()
 	myDB.CreateDatabase()
