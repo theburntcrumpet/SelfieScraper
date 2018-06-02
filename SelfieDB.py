@@ -32,11 +32,11 @@ class SelfieDB(SqliteDB):
 		return self.CheckSingleValueExistsInTable("selfies","selfie_url",selfieUrl)
 
 	def InsertHashtag(self,hashtag):
-		if not self.CheckSingleValueExistsInTable("hashtags","hashtag",hashtag):
+		if not self.CheckHashtagExists(hashtag):
 			self.InsertValuesIntoTable("hashtags",["hashtag"],[hashtag])
 	
 	def InsertSelfie(self,selfieUrl):
-		if not self.CheckSingleValueExistsInTable("selfies","selfie_url",selfieUrl):
+		if not self.CheckSelfieExists(selfieUrl):
 			self.InsertValuesIntoTable("selfies",["selfie_url"],[selfieUrl])
 
 	def InsertMapping(self,hashtagId,selfieId):
