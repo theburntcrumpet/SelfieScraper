@@ -1,6 +1,10 @@
 import tweepy, time
 from credentials import *
 from SelfieDB import *
+from DownloadImages import *
+
+MEDIA_DIRECTORY = "media/"
+DOWNLOAD_ON_COLLECTION = True
 
 logging.basicConfig(level=logging.INFO)
 
@@ -15,6 +19,7 @@ except Exception as e:
 	exit()
 
 db = SelfieDB()
+missingImages = MissingImages(MEDIA_DIRECTORY)
 
 logging.info("Beginning main data harvesting loop")
 while True:
@@ -29,7 +34,13 @@ while True:
 
 			for i in tweet.entities.get('hashtags'):
 				hashtags.append(i["text"])
+			
 			db.AddRecord(media[0]['media_url'],hashtags)
+			
+			if DOWNLOAD_ON_COLLECTION:
+				missingImages.Get()
+		logging.info("Retrieving any missing images")
+		missingImages.Get()
 		logging.info("Sleeping for 60 seconds")
 		time.sleep(60)
 	except Exception as e:

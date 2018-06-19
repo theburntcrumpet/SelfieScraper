@@ -19,6 +19,7 @@ You'll need to create a file named "credentials.py". This file should contain 4 
   access_token_secret = "AN ACCESS TOKEN SECRET HERE" 
 ```
 
+
 Great. Now its just a case of:
 ``` bash
   python Selfies.py

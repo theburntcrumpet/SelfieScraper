@@ -21,6 +21,14 @@ class SelfieDB(SqliteDB):
 
 	def GetHashtagId(self,hashtag):
 		return self.GetIdFromTable("hashtag_id","hashtag","hashtags",hashtag)
+		
+	def GetAllURLs(self):
+			urls = set()
+			c = self.db.cursor()
+			results = c.execute("SELECT selfie_url FROM selfies")
+			for result in results:
+				urls.add(result[0])
+			return urls
 
 	def GetSelfieId(self,selfieUrl):
 		return self.GetIdFromTable("selfie_id","selfie_url","selfies",selfieUrl)
