@@ -2,6 +2,7 @@ import sqlite3, logging, os.path
 class SqliteDB:
 	def __init__(self,sqliteFile="Database.db"):
 		existed = os.path.isfile(sqliteFile)
+		self.sqliteFile = sqliteFile
 		self.db = sqlite3.connect(sqliteFile)
 		if not existed:
 			self.CreateDatabase()

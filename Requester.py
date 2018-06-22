@@ -1,4 +1,4 @@
-import urllib.request,os
+import urllib.request,os,logging
 
 class Requester:
 	def __init__(self,storageDirectory):
@@ -11,12 +11,14 @@ class Requester:
 			filename = url.split("/").pop()
 		try:
 			data = urllib.request.urlopen(url).read()
+			logging.debug(self.storageDirectory+filename)
 			file = open(self.storageDirectory+filename,"wb")
 			file.write(data)
 			file.close()
 			return True
 		except Exception as e:
-			return False
+			logging.error(e)
+			return str(e)
 
 
 if __name__ == "__main__":

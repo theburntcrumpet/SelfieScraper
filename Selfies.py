@@ -20,12 +20,16 @@ except Exception as e:
 
 db = SelfieDB()
 missingImages = MissingImages(MEDIA_DIRECTORY)
+missingImagesWorker = MissingImagesWorker(missingImages)
+if DOWNLOAD_ON_COLLECTION:
+	logging.info("Initializing data retrieval thread")
+	missingImagesWorker.start()
 
 logging.info("Beginning main data harvesting loop")
 while True:
 	try:
 		selfies = tweepy.Cursor(api.search,q="selfie").items()
-		
+		logging.info("Retrieving any missing images")
 		for tweet in selfies:
 			media = tweet.entities.get('media', [])
 			hashtags =   []
@@ -36,13 +40,11 @@ while True:
 				hashtags.append(i["text"])
 			
 			db.AddRecord(media[0]['media_url'],hashtags)
-			
-			if DOWNLOAD_ON_COLLECTION:
-				missingImages.Get()
-		logging.info("Retrieving any missing images")
-		missingImages.Get()
+
 		logging.info("Sleeping for 60 seconds")
 		time.sleep(60)
+
 	except Exception as e:
+		logging.error(e)
 		continue
 

@@ -1,7 +1,8 @@
 from SelfieDB import *
 from Requester import * 
-
-import os
+from threading import Thread
+import threading
+import os,time,copy
 
 class MissingImages:
 	def __init__(self,mediaDirectory):
@@ -17,11 +18,23 @@ class MissingImages:
 		for i in self.__GetURLs():
 			if i.split("/").pop() not in existing:
 				logging.debug("Fetching Image at URL: {}".format(i))
-				self.requester.Download(i)
+				r = self.requester.Download(i)
+				if r != True:
+					try:
+						self.db.UpdateErrorOnURL(i,r)
+					except Exception as e:
+						logging.debug(e)
 
-if __name__ == "__main__":
-	m = MissingImages("media/")
-	m.Get()
-
-
-
+class MissingImagesWorker(Thread):
+	def __init__(self,missingImagesObject):
+		super().__init__()
+		self.missingImagesObject = missingImagesObject 
+	
+	def run(self):
+		self.missingImagesObject = MissingImages(self.missingImagesObject.mediaDirectory)
+		while True:
+			try:
+				self.missingImagesObject.Get()
+				time.sleep(600)
+			except Exception as e:
+				logging.error(e)

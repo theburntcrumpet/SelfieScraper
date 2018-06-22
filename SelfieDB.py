@@ -3,6 +3,15 @@ from SqliteDB import *
 class SelfieDB(SqliteDB):
 	def __init__(self,sqliteFile="Selfies.db"):
 		super().__init__(sqliteFile)
+		self.IncrementalChanges()
+
+	def IncrementalChanges(self):
+		try:
+			c = self.db.cursor()
+			c.execute("ALTER TABLE selfies ADD ret_error TEXT")
+			self.db.commit()
+		except Exception as e:
+			logging.debug(e)
 
 	def CreateDatabase(self):
 		c = self.db.cursor()
@@ -27,7 +36,8 @@ class SelfieDB(SqliteDB):
 			c = self.db.cursor()
 			results = c.execute("SELECT selfie_url FROM selfies")
 			for result in results:
-				urls.add(result[0])
+				if "403" not in result[0] and "404" not in result[0]:
+					urls.add(result[0])
 			return urls
 
 	def GetSelfieId(self,selfieUrl):
@@ -52,7 +62,12 @@ class SelfieDB(SqliteDB):
 			self.InsertValuesIntoTable("selfie_hashtag",["selfie_id","hashtag_id"],[selfieId,hashtagId])
 			return True
 		return False
-		
+
+	def UpdateErrorOnURL(self,url,err):
+		c = self.db.cursor()
+		c.execute("UPDATE selfies SET ret_error=? WHERE selfie_url=?",(err,url))
+		self.db.commit()
+
 	def AddRecord(self,selfieUrl, hashtags):
 		if len(hashtags) == 0:
 			return
